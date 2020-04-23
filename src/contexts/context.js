@@ -1,5 +1,5 @@
-import React, { Component } from "react"
-import items from "../data"
+import React, { Component } from 'react'
+import items from '../data'
 
 // 01. Create the RoomContext (Includes Provider and Consumer)
 const RoomContext = React.createContext()
@@ -10,7 +10,7 @@ class RoomProvider extends Component {
 		rooms: [],
 		sortedRooms: [],
 		featuredRooms: [],
-		loading: true,
+		loading: true
 	}
 
 	// getData
@@ -18,20 +18,20 @@ class RoomProvider extends Component {
 	componentDidMount() {
 		// this.getData
 		let rooms = this.formatData(items)
-		let featuredRooms = rooms.filter(room => room.featured === true)
+		let featuredRooms = rooms.filter((room) => room.featured === true)
 
 		this.setState({
 			rooms,
 			featuredRooms,
 			sortedRooms: rooms,
-			loading: false,
+			loading: false
 		})
 	}
 
 	formatData(items) {
-		let tempItems = items.map(item => {
+		let tempItems = items.map((item) => {
 			let id = item.sys.id
-			let images = item.fields.images.map(image => image.fields.file.url)
+			let images = item.fields.images.map((image) => image.fields.file.url)
 			let room = { ...item.fields, images, id }
 
 			return room
@@ -39,11 +39,18 @@ class RoomProvider extends Component {
 		return tempItems
 	}
 
+	// Single Room Function
+	getRoom = (slug) => {
+		let tempRooms = [...this.state.rooms]
+		const room = tempRooms.find((room) => room.slug === slug)
+
+		return room
+	}
+
 	render() {
 		return (
-			<RoomContext.Provider value={{ ...this.state }}>
+			<RoomContext.Provider value={{ ...this.state, getRoom: this.getRoom }}>
 				{this.props.children}
-				{/*<h1>hello from Room Provider</h1>*/}
 			</RoomContext.Provider>
 		)
 	}
