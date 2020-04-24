@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import items from '../data'
+import React, {Component} from "react"
+import items from "../data"
 
 // 01. Create the RoomContext (Includes Provider and Consumer)
 const RoomContext = React.createContext()
@@ -10,7 +10,7 @@ class RoomProvider extends Component {
 		rooms: [],
 		sortedRooms: [],
 		featuredRooms: [],
-		loading: true
+		loading: true,
 	}
 
 	// getData
@@ -24,7 +24,7 @@ class RoomProvider extends Component {
 			rooms,
 			featuredRooms,
 			sortedRooms: rooms,
-			loading: false
+			loading: false,
 		})
 	}
 
@@ -32,7 +32,7 @@ class RoomProvider extends Component {
 		let tempItems = items.map((item) => {
 			let id = item.sys.id
 			let images = item.fields.images.map((image) => image.fields.file.url)
-			let room = { ...item.fields, images, id }
+			let room = {...item.fields, images, id}
 
 			return room
 		})
@@ -49,7 +49,7 @@ class RoomProvider extends Component {
 
 	render() {
 		return (
-			<RoomContext.Provider value={{ ...this.state, getRoom: this.getRoom }}>
+			<RoomContext.Provider value={{...this.state, getRoom: this.getRoom}}>
 				{this.props.children}
 			</RoomContext.Provider>
 		)
@@ -59,4 +59,14 @@ class RoomProvider extends Component {
 // 03. Creates: The Consumer
 const RoomConsumer = RoomContext.Consumer
 
-export { RoomProvider, RoomConsumer, RoomContext }
+export const withRoomConsumer = (Component) => {
+	return function CoonsumerWrapper(props) {
+		return (
+			<RoomConsumer>
+				{(value) => <Component {...props} context={value} />}
+			</RoomConsumer>
+		)
+	}
+}
+
+export {RoomProvider, RoomConsumer, RoomContext}
