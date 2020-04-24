@@ -393,7 +393,7 @@ h6 {
 	margin: 1rem 0;
 }
 .desc h3 {
-	text-transform: capitalize;
+	text-transform: uppercase;
 	letter-spacing: var(--mainSpacing);
 }
 .desc p {
@@ -401,7 +401,7 @@ h6 {
 }
 .info h3,
 .info h6 {
-	text-transform: capitalize;
+	text-transform: uppercase;
 	letter-spacing: var(--mainSpacing);
 }
 
@@ -413,7 +413,7 @@ h6 {
 	margin: 0 auto 3rem auto;
 }
 .room-extras h6 {
-	text-transform: capitalize;
+	text-transform: uppercase;
 	letter-spacing: var(--mainSpacing);
 }
 .extras {
