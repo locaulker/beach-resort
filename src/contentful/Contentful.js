@@ -1,6 +1,9 @@
 import { createClient } from "contentful"
+//import dotenv from 'dotenv'
+
+//require('dotenv').config()
 
 export default createClient({
-	space: "zpewglvpfakt",
-	accessToken: "QUrLQ_--7jJW9csSioREc0uvKNGS-JZ--zchvMs1Q1I",
+	space: process.env.REACT_APP_SPACE_ID,
+	accessToken: process.env.REACT_APP_ACCESS_TOKEN,
 })
