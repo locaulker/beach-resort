@@ -1,5 +1,11 @@
 import React, { Component } from "react"
-import items from "../data"
+//import items from "../data"
+import Client from "../contentful/Contentful"
+
+// Get BeachResort data from Contentful
+//Client.getEntries({
+//	content_type: "beachResortProject",
+//}).then(response => console.log(response.items))
 
 // 01. Create the RoomContext (Includes Provider and Consumer)
 const RoomContext = React.createContext()
@@ -23,23 +29,50 @@ class RoomProvider extends Component {
 	}
 
 	// getData (external data)
+	getData = async () => {
+		try {
+			let response = await Client.getEntries({
+				content_type: "beachResortProject",
+				//order: "sys.createdAt",
+				order: "fields.price",
+				//order: "-fields.price",
+			})
+
+			let rooms = this.formatData(response.items)
+			let featuredRooms = rooms.filter(room => room.featured === true)
+			let maxPrice = Math.max(...rooms.map(item => item.price))
+			let maxSize = Math.max(...rooms.map(item => item.size))
+
+			this.setState({
+				rooms,
+				featuredRooms,
+				sortedRooms: rooms,
+				loading: false,
+				price: maxPrice,
+				maxPrice,
+				maxSize,
+			})
+		} catch (error) {
+			console.log(error)
+		}
+	}
 
 	componentDidMount() {
-		// this.getData
-		let rooms = this.formatData(items)
-		let featuredRooms = rooms.filter(room => room.featured === true)
-		let maxPrice = Math.max(...rooms.map(item => item.price))
-		let maxSize = Math.max(...rooms.map(item => item.size))
+		this.getData()
+		//let rooms = this.formatData(items)
+		//let featuredRooms = rooms.filter(room => room.featured === true)
+		//let maxPrice = Math.max(...rooms.map(item => item.price))
+		//let maxSize = Math.max(...rooms.map(item => item.size))
 
-		this.setState({
-			rooms,
-			featuredRooms,
-			sortedRooms: rooms,
-			loading: false,
-			price: maxPrice,
-			maxPrice,
-			maxSize,
-		})
+		//this.setState({
+		//	rooms,
+		//	featuredRooms,
+		//	sortedRooms: rooms,
+		//	loading: false,
+		//	price: maxPrice,
+		//	maxPrice,
+		//	maxSize,
+		//})
 	}
 
 	formatData(items) {
